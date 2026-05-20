@@ -22,7 +22,6 @@ function Index() {
             <a href="#features" className="text-sm font-medium text-[#7bd0ff] hover:text-[#2563eb]">Features</a>
             <Link to="/resume-analysis" className="text-sm font-medium text-[#7bd0ff] hover:text-[#2563eb]">Resume</Link>
             <Link to="/job-matches" className="text-sm font-medium text-[#7bd0ff] hover:text-[#2563eb]">Jobs</Link>
-            <Link to="/resume-analysis" className="bg-[#2563eb] text-white px-6 py-2 rounded-lg text-sm font-medium hover:scale-105 transition-transform">Get Started</Link>
           </nav>
           <span className="material-symbols-outlined md:hidden text-[#b4c5ff]">menu</span>
         </div>
@@ -44,10 +43,6 @@ function Index() {
                 The executive-grade platform that analyzes your professional DNA to find matches that others miss. Move beyond job boards into intelligent career steering.
               </p>
               <div className="flex flex-wrap gap-4 pt-4">
-                <Link to="/resume-analysis" className="bg-[#2563eb] text-white px-8 py-4 rounded-lg text-sm font-medium flex items-center gap-2 hover:bg-[#b4c5ff] hover:text-[#002a78] transition-all active:scale-95">
-                  Get Started Free
-                  <span className="material-symbols-outlined">arrow_forward</span>
-                </Link>
                 <Link to="/resume-analysis" className="border border-[#434655] text-[#dae2fd] px-8 py-4 rounded-lg text-sm font-medium hover:bg-[#171f33] transition-all">
                   Analyze My Resume
                 </Link>
