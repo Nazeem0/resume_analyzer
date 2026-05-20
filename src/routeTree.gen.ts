@@ -9,8 +9,20 @@
 // Additionally, you should also exclude this file from your linter and/or formatter to prevent it from being checked or modified.
 
 import { Route as rootRouteImport } from './routes/__root'
+import { Route as ResumeAnalysisRouteImport } from './routes/resume-analysis'
+import { Route as JobMatchesRouteImport } from './routes/job-matches'
 import { Route as IndexRouteImport } from './routes/index'
 
+const ResumeAnalysisRoute = ResumeAnalysisRouteImport.update({
+  id: '/resume-analysis',
+  path: '/resume-analysis',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const JobMatchesRoute = JobMatchesRouteImport.update({
+  id: '/job-matches',
+  path: '/job-matches',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const IndexRoute = IndexRouteImport.update({
   id: '/',
   path: '/',
@@ -19,28 +31,50 @@ const IndexRoute = IndexRouteImport.update({
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
+  '/job-matches': typeof JobMatchesRoute
+  '/resume-analysis': typeof ResumeAnalysisRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
+  '/job-matches': typeof JobMatchesRoute
+  '/resume-analysis': typeof ResumeAnalysisRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
+  '/job-matches': typeof JobMatchesRoute
+  '/resume-analysis': typeof ResumeAnalysisRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/'
+  fullPaths: '/' | '/job-matches' | '/resume-analysis'
   fileRoutesByTo: FileRoutesByTo
-  to: '/'
-  id: '__root__' | '/'
+  to: '/' | '/job-matches' | '/resume-analysis'
+  id: '__root__' | '/' | '/job-matches' | '/resume-analysis'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
+  JobMatchesRoute: typeof JobMatchesRoute
+  ResumeAnalysisRoute: typeof ResumeAnalysisRoute
 }
 
 declare module '@tanstack/react-router' {
   interface FileRoutesByPath {
+    '/resume-analysis': {
+      id: '/resume-analysis'
+      path: '/resume-analysis'
+      fullPath: '/resume-analysis'
+      preLoaderRoute: typeof ResumeAnalysisRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/job-matches': {
+      id: '/job-matches'
+      path: '/job-matches'
+      fullPath: '/job-matches'
+      preLoaderRoute: typeof JobMatchesRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/': {
       id: '/'
       path: '/'
@@ -53,17 +87,9 @@ declare module '@tanstack/react-router' {
 
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
+  JobMatchesRoute: JobMatchesRoute,
+  ResumeAnalysisRoute: ResumeAnalysisRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
   ._addFileTypes<FileRouteTypes>()
-
-import type { getRouter } from './router.tsx'
-import type { startInstance } from './start.ts'
-declare module '@tanstack/react-start' {
-  interface Register {
-    ssr: true
-    router: Awaited<ReturnType<typeof getRouter>>
-    config: Awaited<ReturnType<typeof startInstance.getOptions>>
-  }
-}
