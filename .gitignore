@@ -16,6 +16,44 @@ dist-ssr
 .nitro
 *.local
 
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.pyo
+*.pyd
+*.pdb
+*.egg-info/
+*.egg
+pip-wheel-metadata/
+build/
+develop-eggs/
+env/
+venv/
+.venv/
+.Python
+pyvenv.cfg
+__pypackages__/
+*.sqlite3
+*.db
+*.log
+*.pot
+*.po
+*.mo
+*.coverage
+coverage.xml
+htmlcov/
+.cache
+.pytest_cache/
+.mypy_cache/
+profile_default/
+ipython_config.py
+__pypackages__/
+
+# Environment files
+.env
+.env.*
+
 # Wrangler / Cloudflare
 .wrangler/
 .dev.vars

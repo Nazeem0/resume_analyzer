@@ -1,5 +1,5 @@
-import { createFileRoute, Link } from "@tanstack/react-router";
-import { DashboardSidebar } from "@/components/DashboardSidebar";
+import { createFileRoute, useNavigate } from "@tanstack/react-router";
+import { useState, useRef } from "react";
 
 export const Route = createFileRoute("/resume-analysis")({
   head: () => ({
@@ -12,118 +12,297 @@ export const Route = createFileRoute("/resume-analysis")({
 });
 
 function ResumeAnalysisPage() {
+  const [isLoading, setIsLoading] = useState(false);
+  const [isDragging, setIsDragging] = useState(false);
+  const [fileName, setFileName] = useState<string | null>(null);
+  const fileInputRef = useRef<HTMLInputElement>(null);
+  const navigate = useNavigate();
+
+  const performAnalysis = async (file: File) => {
+    setIsLoading(true);
+    try {
+      const formData = new FormData();
+      formData.append("file", file);
+
+      const response = await fetch("http://localhost:8000/analyze", {
+        method: "POST",
+        body: formData,
+      });
+
+      if (!response.ok) throw new Error("Failed to analyze resume. Make sure the Python API is running!");
+
+      const result = await response.json();
+      sessionStorage.setItem("analysisResult", JSON.stringify(result));
+      navigate({ to: "/job-matches" });
+    } catch (error: any) {
+      const msg = error?.message?.includes("fetch")
+        ? "❌ Could not connect to the Python API.\n\nPlease make sure your Python server is running:\n  python api.py"
+        : `❌ Analysis failed: ${error?.message || error}`;
+      alert(msg);
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
+  const handleFile = (file: File) => {
+    setFileName(file.name);
+    performAnalysis(file);
+  };
+
+  const handleFileUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (file) handleFile(file);
+  };
+
+  const handleDragOver = (e: React.DragEvent<HTMLDivElement>) => {
+    e.preventDefault();
+    setIsDragging(true);
+  };
+
+  const handleDragLeave = () => setIsDragging(false);
+
+  const handleDrop = (e: React.DragEvent<HTMLDivElement>) => {
+    e.preventDefault();
+    setIsDragging(false);
+    const file = e.dataTransfer.files?.[0];
+    if (file) handleFile(file);
+  };
+
+  const trustItems = [
+    { icon: "lock", title: "Privacy First", desc: "Your data is encrypted and never sold to third parties.", color: "#38bdf8" },
+    { icon: "psychology", title: "AI Matching", desc: "Advanced extraction for precision career mapping.", color: "#a78bfa" },
+    { icon: "bolt", title: "Instant Results", desc: "Analysis complete in under 12 milliseconds.", color: "#34d399" },
+  
+  ];
+
   return (
-    <div className="bg-gradient-to-b from-[#0b1326] to-[#060e20] min-h-screen flex text-[#dae2fd]">
-      <DashboardSidebar />
+    <div
+      className="glass-bg"
+      style={{ minHeight: "100vh", color: "#e2e8ff", overflowX: "hidden", paddingBottom: 80 }}
+    >
+      {/* Orbs */}
+      <div className="orb orb-1" />
+      <div className="orb orb-2" />
+      <div className="orb orb-3" />
 
-      <main className="flex-1 ml-72 flex flex-col min-h-screen">
-        <header className="w-full sticky top-0 z-30 bg-[#060e20]/80 backdrop-blur">
-          <div className="flex justify-between items-center h-16 px-6 max-w-[1200px] mx-auto">
-            <div className="flex items-center gap-4">
-              <Link to="/" className="material-symbols-outlined text-[#7bd0ff] hover:text-[#b4c5ff]">arrow_back</Link>
-              <h1 className="text-2xl font-semibold text-[#b4c5ff]">Resume Analysis</h1>
-            </div>
-            <div className="flex items-center gap-4">
-              <div className="hidden md:flex items-center px-3 py-1 bg-[#00a6e0] text-[#00374d] rounded-full text-xs font-bold uppercase tracking-wider">
-                Premium Member
-              </div>
-              <div className="w-8 h-8 rounded-full border border-[#8d90a0] overflow-hidden">
-                <img alt="Alex" className="w-full h-full object-cover" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDcKWqYyUSy5hVpQz3OZJT3jl6dmRYDNehcvFBrHw6izrI2GNz8tiu8EIjn8lwz6FsSM9cyNfCV165r6o5e6TtXtfrvtgN7O_WWerwf1vq4UtaV7kEGxFwFJch-QuoBD_ihfvGYaofbu7XQ1K4oDowgtPyHS5PoBxRklD2QqrKSH6fw4gVPqGLyA9F2tUiX_h8YRsvyXYU8D0ykEyKV2MVmQ7gQq54P2vVfWv8NTc6-bLVh5hYJLLTpXkVm2aNGiBY-Ic5IAoUycdE" />
-              </div>
-            </div>
+      <main style={{ position: "relative", zIndex: 1, maxWidth: 840, margin: "0 auto", padding: "56px 24px" }}>
+
+        {/* Header */}
+        <div style={{ textAlign: "center", marginBottom: 48 }}>
+          <div className="badge-glass" style={{ marginBottom: 24, display: "inline-flex" }}>
+            <span className="glow-dot" />
+            AI-Powered Resume Scanner
           </div>
-        </header>
+          <h1
+            style={{
+              fontSize: "clamp(2rem,5vw,3.4rem)",
+              fontWeight: 900,
+              letterSpacing: "-0.03em",
+              lineHeight: 1.1,
+              marginBottom: 16,
+            }}
+          >
+            Upload Your{" "}
+            <span className="gradient-text">Resume</span>
+          </h1>
+          <p style={{ color: "#475569", fontSize: 16, lineHeight: 1.7, maxWidth: 480, margin: "0 auto" }}>
+            Our AI will extract your expertise and match you with executive roles tailored to your DNA.
+          </p>
+        </div>
 
-        <div className="flex-1 p-6 max-w-[1200px] mx-auto w-full grid grid-cols-12 gap-6">
-          {/* Left: Upload */}
-          <div className="col-span-12 lg:col-span-7 flex flex-col gap-6">
-            <section className="glass-card rounded-xl p-8 flex flex-col items-center text-center">
-              <div className="w-full max-w-md space-y-6">
-                <div className="space-y-2">
-                  <h2 className="text-3xl font-semibold">Upload Your Resume</h2>
-                  <p className="text-[#c3c6d7]">Our AI will extract your expertise and match you with executive roles.</p>
+        {/* Main Upload Card */}
+        <div
+          className="glass-strong glass-border-glow"
+          style={{
+            borderRadius: 28,
+            padding: "48px 40px",
+            boxShadow: "0 40px 100px rgba(0,0,0,0.5), 0 0 60px rgba(99,102,241,0.1)",
+            position: "relative",
+            overflow: "hidden",
+          }}
+        >
+          {/* Background accent */}
+          <div style={{
+            position: "absolute", top: "50%", left: "50%",
+            transform: "translate(-50%,-50%)",
+            width: 500, height: 500, borderRadius: "50%",
+            background: "radial-gradient(circle, rgba(99,102,241,0.06) 0%, transparent 70%)",
+            pointerEvents: "none",
+          }} />
+
+          {/* Drop Zone */}
+          <div
+            className="drop-zone"
+            style={{
+              padding: "56px 32px",
+              textAlign: "center",
+              position: "relative",
+              borderColor: isDragging ? "rgba(129,140,248,0.8)" : undefined,
+              background: isDragging ? "rgba(99,102,241,0.08)" : undefined,
+              boxShadow: isDragging ? "0 0 40px rgba(99,102,241,0.15), inset 0 0 40px rgba(99,102,241,0.05)" : undefined,
+            }}
+            onDragOver={handleDragOver}
+            onDragLeave={handleDragLeave}
+            onDrop={handleDrop}
+            onClick={() => !isLoading && fileInputRef.current?.click()}
+          >
+            <input
+              type="file"
+              ref={fileInputRef}
+              onChange={handleFileUpload}
+              className="hidden"
+              accept=".pdf,.docx,.rtf,.txt"
+              disabled={isLoading}
+            />
+
+            {isLoading ? (
+              /* Loading state */
+              <div style={{ display: "flex", flexDirection: "column", alignItems: "center", gap: 20 }}>
+                <div style={{ position: "relative", width: 72, height: 72 }}>
+                  <div style={{
+                    position: "absolute", inset: 0,
+                    borderRadius: "50%",
+                    border: "3px solid rgba(99,102,241,0.15)",
+                  }} />
+                  <div style={{
+                    position: "absolute", inset: 0,
+                    borderRadius: "50%",
+                    border: "3px solid transparent",
+                    borderTopColor: "#6366f1",
+                    animation: "spin-slow 1s linear infinite",
+                  }} />
+                  <div style={{
+                    position: "absolute", inset: 8,
+                    borderRadius: "50%",
+                    border: "2px solid transparent",
+                    borderTopColor: "#38bdf8",
+                    animation: "spin-slow 0.7s linear infinite reverse",
+                  }} />
                 </div>
-                <div className="rounded-xl p-12 border-2 border-dashed border-[#434655] hover:border-[#b4c5ff] transition-all cursor-pointer group">
-                  <div className="flex flex-col items-center gap-4">
-                    <div className="w-16 h-16 rounded-full bg-[#b4c5ff]/10 flex items-center justify-center text-[#b4c5ff] group-hover:scale-110 transition-transform">
-                      <span className="material-symbols-outlined" style={{ fontSize: 36 }}>cloud_upload</span>
+                <div>
+                  <div style={{ fontSize: 18, fontWeight: 700, marginBottom: 6 }}>Analyzing Resume…</div>
+                  <div style={{ fontSize: 13, color: "#475569" }}>{fileName && `Processing: ${fileName}`}</div>
+                </div>
+                <div style={{ display: "flex", gap: 8, marginTop: 8 }}>
+                  {["Extracting skills", "Mapping experience", "Finding matches"].map((step, i) => (
+                    <div
+                      key={step}
+                      style={{
+                        padding: "5px 12px",
+                        borderRadius: 100,
+                        fontSize: 11,
+                        fontWeight: 600,
+                        background: "rgba(99,102,241,0.1)",
+                        border: "1px solid rgba(99,102,241,0.2)",
+                        color: "#818cf8",
+                        opacity: 0.6 + i * 0.2,
+                      }}
+                    >
+                      {step}
                     </div>
-                    <div className="space-y-1">
-                      <p className="text-2xl font-semibold">Drag &amp; Drop Resume</p>
-                      <p className="text-sm text-[#c3c6d7]">PDF, DOCX, or RTF (Max 10MB)</p>
-                    </div>
-                    <button className="mt-4 px-6 py-3 bg-[#b4c5ff] text-[#002a78] font-bold rounded-lg hover:brightness-110 active:scale-95 transition-all">
-                      Select File
-                    </button>
-                  </div>
-                </div>
-                <div className="flex items-center gap-4 text-[#8d90a0] py-4">
-                  <div className="flex-1 h-px bg-[#434655]"></div>
-                  <span className="text-xs uppercase tracking-widest font-bold">Safe &amp; Secure</span>
-                  <div className="flex-1 h-px bg-[#434655]"></div>
-                </div>
-                <div className="grid grid-cols-2 gap-4 text-left">
-                  <div className="p-4 bg-[#131b2e] border border-[#434655] rounded-lg space-y-2">
-                    <span className="material-symbols-outlined text-[#7bd0ff]" style={{ fontVariationSettings: "'FILL' 1" }}>lock</span>
-                    <h3 className="text-sm font-bold">Privacy First</h3>
-                    <p className="text-xs text-[#c3c6d7]">Your data is encrypted and never sold to third parties.</p>
-                  </div>
-                  <div className="p-4 bg-[#131b2e] border border-[#434655] rounded-lg space-y-2">
-                    <span className="material-symbols-outlined text-[#7bd0ff]" style={{ fontVariationSettings: "'FILL' 1" }}>psychology</span>
-                    <h3 className="text-sm font-bold">AI Matching</h3>
-                    <p className="text-xs text-[#c3c6d7]">Advanced extraction for precision career mapping.</p>
-                  </div>
+                  ))}
                 </div>
               </div>
-            </section>
+            ) : (
+              /* Default state */
+              <div style={{ display: "flex", flexDirection: "column", alignItems: "center", gap: 20 }}>
+                {/* Icon */}
+                <div
+                  style={{
+                    width: 80,
+                    height: 80,
+                    borderRadius: "50%",
+                    background: "rgba(99,102,241,0.1)",
+                    border: "1px solid rgba(99,102,241,0.25)",
+                    display: "flex",
+                    alignItems: "center",
+                    justifyContent: "center",
+                    boxShadow: "0 0 40px rgba(99,102,241,0.2)",
+                    transition: "transform 0.3s ease",
+                  }}
+                >
+                  <span
+                    className="material-symbols-outlined"
+                    style={{ fontSize: 40, color: "#818cf8" }}
+                  >
+                    cloud_upload
+                  </span>
+                </div>
+
+                <div>
+                  <p style={{ fontSize: 22, fontWeight: 700, marginBottom: 8 }}>
+                    {isDragging ? "Drop it here!" : "Drag & Drop Resume"}
+                  </p>
+                  <p style={{ fontSize: 13, color: "#475569" }}>PDF, DOCX, TXT or RTF · Max 10MB</p>
+                </div>
+
+                <div style={{ display: "flex", alignItems: "center", gap: 12, color: "#334155", width: "100%", maxWidth: 300 }}>
+                  <div style={{ flex: 1, height: 1, background: "rgba(255,255,255,0.06)" }} />
+                  <span style={{ fontSize: 11, fontWeight: 700, letterSpacing: "0.08em", textTransform: "uppercase" }}>or</span>
+                  <div style={{ flex: 1, height: 1, background: "rgba(255,255,255,0.06)" }} />
+                </div>
+
+                <button
+                  className="btn-primary"
+                  style={{ fontSize: 14, padding: "13px 32px" }}
+                  onClick={(e) => { e.stopPropagation(); fileInputRef.current?.click(); }}
+                >
+                  <span className="material-symbols-outlined" style={{ fontSize: 18 }}>folder_open</span>
+                  Browse Files
+                </button>
+              </div>
+            )}
           </div>
 
-          {/* Right: Preview */}
-          <div className="col-span-12 lg:col-span-5 flex flex-col gap-6">
-            <section className="glass-card rounded-xl p-6 flex flex-col h-full">
-              <div className="flex items-center justify-between mb-8">
-                <h2 className="text-2xl font-semibold">Extraction Preview</h2>
-                <span className="px-3 py-1 bg-[#222a3d] text-[#8d90a0] rounded-full text-[10px] font-bold uppercase tracking-wider border border-[#434655]">
-                  Waiting for upload
-                </span>
-              </div>
-              <div className="space-y-8 flex-1">
-                <div className="flex items-center gap-4">
-                  <div className="w-12 h-12 rounded-full bg-[#2d3449] animate-pulse" />
-                  <div className="flex-1 space-y-2">
-                    <div className="h-4 w-1/2 bg-[#2d3449] rounded animate-pulse" />
-                    <div className="h-3 w-1/3 bg-[#2d3449]/50 rounded animate-pulse" />
-                  </div>
+          {/* Trust Grid */}
+          <div
+            style={{
+              display: "grid",
+              gridTemplateColumns: "repeat(auto-fit, minmax(170px,1fr))",
+              gap: 16,
+              marginTop: 32,
+            }}
+          >
+            {trustItems.map(({ icon, title, desc, color }) => (
+              <div
+                key={title}
+                className="glass-subtle"
+                style={{ padding: "20px 18px" }}
+              >
+                <div style={{ marginBottom: 10 }}>
+                  <span
+                    className="material-symbols-outlined"
+                    style={{ fontSize: 22, color, fontVariationSettings: "'FILL' 1" }}
+                  >
+                    {icon}
+                  </span>
                 </div>
-                <div className="space-y-4">
-                  <h3 className="text-xs font-bold text-[#8d90a0] uppercase tracking-wider">Top Skills Detected</h3>
-                  <div className="flex flex-wrap gap-2">
-                    {[24, 32, 20, 28].map((w, i) => (
-                      <div key={i} className="h-8 bg-[#2d3449] rounded-full border border-[#434655]/30 animate-pulse" style={{ width: `${w * 4}px` }} />
-                    ))}
-                  </div>
-                </div>
-                <div className="space-y-4">
-                  <h3 className="text-xs font-bold text-[#8d90a0] uppercase tracking-wider">Career Timeline</h3>
-                  <div className="space-y-6 relative border-l-2 border-[#434655] ml-2 pl-6">
-                    {[0, 1].map((i) => (
-                      <div key={i} className="relative">
-                        <div className="absolute -left-[31px] top-0 w-3 h-3 rounded-full bg-[#434655] border-2 border-[#0b1326]" />
-                        <div className="h-4 w-48 bg-[#2d3449] rounded mb-2 animate-pulse" />
-                        <div className="h-3 w-64 bg-[#2d3449]/50 rounded animate-pulse" />
-                      </div>
-                    ))}
-                  </div>
-                </div>
+                <div style={{ fontSize: 13, fontWeight: 700, marginBottom: 4 }}>{title}</div>
+                <p style={{ fontSize: 11, color: "#475569", lineHeight: 1.6 }}>{desc}</p>
               </div>
-              <div className="mt-8 pt-6 border-t border-[#434655]">
-                <p className="text-xs text-[#c3c6d7] italic flex items-center gap-2">
-                  <span className="material-symbols-outlined" style={{ fontSize: 16 }}>info</span>
-                  Real-time extraction will begin immediately upon file selection.
-                </p>
-              </div>
-            </section>
+            ))}
           </div>
+        </div>
+
+        {/* Supported Formats */}
+        <div style={{ textAlign: "center", marginTop: 28, display: "flex", gap: 12, justifyContent: "center", flexWrap: "wrap" }}>
+          {[".PDF", ".DOCX", ".TXT", ".RTF"].map((fmt) => (
+            <div
+              key={fmt}
+              style={{
+                padding: "6px 16px",
+                borderRadius: 100,
+                background: "rgba(255,255,255,0.03)",
+                border: "1px solid rgba(255,255,255,0.07)",
+                fontSize: 12,
+                fontWeight: 700,
+                color: "#334155",
+                letterSpacing: "0.04em",
+              }}
+            >
+              {fmt}
+            </div>
+          ))}
         </div>
       </main>
     </div>
