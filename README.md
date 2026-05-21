@@ -131,7 +131,7 @@
 ```
 resumeanalyzer/
 │
-├── 🎨 Frontend (React + TanStack)
+├── 🎨 frontend/
 │   ├── src/
 │   │   ├── routes/
 │   │   │   ├── __root.tsx              # Root layout with navigation
@@ -150,21 +150,26 @@ resumeanalyzer/
 │   │
 │   ├── vite.config.ts                  # ⚡ Vite build configuration
 │   ├── tsconfig.json                   # 📝 TypeScript configuration
-│   └── package.json                    # 📦 Dependencies & scripts
+│   ├── package.json                    # 📦 Dependencies & scripts
+│   ├── package-lock.json               # 📦 Lockfile for npm dependencies
+│   ├── bun.lock                        # Optional Bun lockfile
+│   ├── bunfig.toml                     # Optional Bun config
+│   ├── components.json                 # Frontend component config
+│   └── node_modules/                   # Installed frontend packages
 │
-├── 🐍 Backend (Python + FastAPI)
+├── 🐍 backend/
 │   ├── api.py                          # 🌐 FastAPI REST server
 │   ├── local_parser.py                 # 🧠 spaCy NLP resume parser
-│   └── requirements.txt               # 📋 Python dependencies
+│   ├── resume_analyzer.py              # 🔧 Shared resume analysis utilities
+│   ├── requirements.txt                # 📋 Python dependencies
+│   └── resume_data.csv                 # 💾 Job dataset (50K+ records)
 │
-├── 📊 Data
-│   └── resume_data.csv                 # 💾 Job dataset (17MB, 50K+ records)
-│
-└── 📄 Config Files
-    ├── .gitignore
-    ├── .prettierrc
-    ├── eslint.config.js
-    └── README.md                       # 📖 You are here!
+├── 📄 Config Files
+│   ├── .gitignore
+│   ├── .prettierrc
+│   ├── .prettierignore
+│   ├── eslint.config.js
+│   └── README.md                       # 📖 You are here!
 ```
 
 <br/>
@@ -226,16 +231,14 @@ cd resumeanalyzer
 ### 2️⃣ Install Frontend Dependencies
 
 ```bash
-# Using npm
+cd frontend
 npm install
-
-# Or using bun (faster)
-bun install
 ```
 
 ### 3️⃣ Install Backend Dependencies
 
 ```bash
+cd ../backend
 pip install -r requirements.txt
 python -m spacy download en_core_web_sm
 ```
@@ -243,6 +246,7 @@ python -m spacy download en_core_web_sm
 ### 4️⃣ Start the Backend Server
 
 ```bash
+cd backend
 python api.py
 ```
 > 🟢 The API server starts at **http://localhost:8000**
@@ -250,6 +254,7 @@ python api.py
 ### 5️⃣ Start the Frontend Dev Server
 
 ```bash
+cd frontend
 npm run dev
 ```
 > 🟢 The app opens at **http://localhost:5173**

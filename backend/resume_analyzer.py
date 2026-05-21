@@ -107,8 +107,32 @@ def extract_required_years(exp_str):
     return 0
 
 def calculate_compatibility(candidate, job):
-    # 1. Skills Match (40%)
+    # FILTER: Skip jobs with domain-specific keywords if candidate doesn't have them
+    cand_primary = str(candidate.get('primary_domain', '')).lower()
     cand_skills = [s.lower() for s in candidate.get('skills', []) + candidate.get('tools_technologies', [])]
+    job_title = str(job['job_position_name']).lower()
+    
+    # If job requires specialized domain (mechanical, engineering, medical, etc.) 
+    # but candidate doesn't have it, drastically reduce score or skip
+    domain_keywords = ['mechanical', 'engineering', 'medical', 'healthcare', 'automotive', 'manufacturing']
+    has_domain_keyword = any(kw in job_title for kw in domain_keywords)
+    
+    if has_domain_keyword:
+        has_matching_domain = any(kw in cand_primary or any(kw in s for s in cand_skills) for kw in domain_keywords)
+        if not has_matching_domain:
+            # Return very low score for domain-mismatched jobs
+            return {
+                'total_score': 5,  # Heavily penalize domain mismatch
+                'skills_score': 0,
+                'skills_matched_pct': 0,
+                'exp_score': 0,
+                'edu_score': 5,
+                'industry_score': 0,
+                'matched_skills': [],
+                'job': job
+            }
+    
+    # 1. Skills Match (40%)
     job_skills_raw = str(job['skills_required'])
     
     if job_skills_raw.lower() in ['nan', 'none', '']:
@@ -158,9 +182,17 @@ def calculate_compatibility(candidate, job):
         else:
             edu_score = 10 # Default partial match
             
-    # 4. Industry Match (15%) - Requested to not focus on this column
-    # We will grant full points to maintain the 100-point scale
-    industry_score = 15
+    # 4. Industry Match (15%) - Only award points if there's actual domain overlap
+    industry_score = 0
+    job_title = str(job['job_position_name']).lower()
+    cand_primary = str(candidate.get('primary_domain', '')).lower()
+    
+    # Check if job title or domain aligns with candidate's primary domain
+    if cand_primary and any(keyword in job_title for keyword in cand_primary.split()):
+        industry_score = 15
+    elif any(keyword in job_title for keyword in ['management', 'lead', 'director', 'executive'] if keyword in cand_primary):
+        industry_score = 15
+    # Otherwise, industry_score stays 0 - don't artificially boost unrelated roles
     
     total_score = skills_score + exp_score + edu_score + industry_score
     
