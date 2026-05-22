@@ -53,6 +53,8 @@ __pypackages__/
 # Environment files
 .env
 .env.*
+!.env.example
+
 
 # Wrangler / Cloudflare
 .wrangler/

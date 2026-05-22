@@ -3,7 +3,7 @@
 </p>
 
 <h1 align="center">
-  🚀 CareerAI — Resume Analyzer &amp; Job Matcher
+  🚀 CareerAI — Resume Analyzer & Job Matcher
 </h1>
 
 <p align="center">
@@ -95,7 +95,7 @@
 │         │                │                     │             │
 │         └────────────────┼─────────────────────┘             │
 │                          │                                   │
-│              TanStack Router + React 19 (SPA)                │
+│              React Router + React 19 (SPA)                   │
 └──────────────────────────┬───────────────────────────────────┘
                            │ HTTP POST /analyze
                            ▼
@@ -134,19 +134,17 @@ resumeanalyzer/
 ├── 🎨 frontend/
 │   ├── index.html                      # 📄 Vite SPA entry point (fonts, meta)
 │   ├── vercel.json                     # ☁️ Vercel SPA routing rewrite
-│   ├── vite.config.ts                  # ⚡ Standard Vite + TanStack Router config
+│   ├── vite.config.ts                  # ⚡ Standard Vite SPA config
 │   ├── tsconfig.json                   # 📝 TypeScript configuration
 │   ├── package.json                    # 📦 Dependencies & scripts
 │   └── src/
 │       ├── main.tsx                    # 🚀 React SPA entry point
-│       ├── router.tsx                  # 🗺️ TanStack router config
-│       ├── routeTree.gen.ts            # 🔧 Auto-generated route tree
+│       ├── App.tsx                     # 🗺️ App component with React Router routes
 │       ├── styles.css                  # 🎨 Global styles & design system
-│       ├── routes/
-│       │   ├── __root.tsx              # 🏠 Root layout with navigation
-│       │   ├── index.tsx               # 🏠 Landing page (Hero + Features)
-│       │   ├── resume-analysis.tsx     # 📄 Resume upload & analysis page
-│       │   └── job-matches.tsx         # 💼 Job matches dashboard
+│       ├── pages/                      # 🏠 Page components
+│       │   ├── Home.tsx                # 🏠 Landing page (Hero + Features)
+│       │   ├── ResumeAnalysis.tsx      # 📄 Resume upload & analysis page
+│       │   └── JobMatches.tsx          # 💼 Job matches dashboard
 │       └── components/
 │           ├── AnalysisResultDisplay.tsx  # 📊 Rich analysis result UI
 │           ├── DashboardSidebar.tsx       # 📋 Sidebar navigation
@@ -181,8 +179,7 @@ resumeanalyzer/
 | Technology | Purpose |
 |:---|:---|
 | **React 19** | UI framework with latest concurrent features |
-| **TanStack Router** | Type-safe file-based client-side routing |
-| **TanStack Query** | Async state management & data fetching |
+| **React Router DOM** | Standard client-side routing for React SPAs |
 | **TypeScript 5.8** | Type safety across the entire frontend |
 | **Vite 6** | Next-gen build tool with HMR |
 | **Tailwind CSS 4** | Utility-first styling with JIT compilation |
