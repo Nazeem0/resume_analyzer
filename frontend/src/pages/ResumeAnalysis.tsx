@@ -18,7 +18,7 @@ function ResumeAnalysis() {
         window.location.hostname === "localhost" || window.location.hostname === "127.0.0.1";
       const apiUrl = isLocalhost
         ? "http://localhost:8000/analyze"
-        : "https://resume-analyzer-api-yh3l.onrender.com/analyze";
+        : "https://resume-analyzer-6ihs.onrender.com/analyze";
 
       const response = await fetch(apiUrl, {
         method: "POST",
