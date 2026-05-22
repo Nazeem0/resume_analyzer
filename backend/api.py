@@ -1,16 +1,18 @@
 import os
 import io
 import re
+from typing import AsyncGenerator
 import pandas as pd
 import PyPDF2
 from contextlib import asynccontextmanager
 from fastapi import FastAPI, UploadFile, File, HTTPException
+# pyrefly: ignore [missing-import]
 from fastapi.middleware.cors import CORSMiddleware
 from gemini_parser import parse_resume_gemini
 from local_parser import parse_resume_local
 
 @asynccontextmanager
-async def lifespan(app: FastAPI):
+async def lifespan(app: FastAPI) -> AsyncGenerator[None, None]:
     load_and_clean_jobs()
     yield
 

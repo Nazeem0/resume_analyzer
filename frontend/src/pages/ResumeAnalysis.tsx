@@ -1,21 +1,7 @@
-import { createFileRoute, useNavigate } from "@tanstack/react-router";
 import { useState, useRef } from "react";
+import { useNavigate } from "react-router-dom";
 
-export const Route = createFileRoute("/resume-analysis")({
-  head: () => ({
-    meta: [
-      { title: "Resume Analysis | CareerAI" },
-      {
-        name: "description",
-        content:
-          "Upload your resume and let our AI extract your expertise to match executive roles.",
-      },
-    ],
-  }),
-  component: ResumeAnalysisPage,
-});
-
-function ResumeAnalysisPage() {
+function ResumeAnalysis() {
   const [isLoading, setIsLoading] = useState(false);
   const [isDragging, setIsDragging] = useState(false);
   const [fileName, setFileName] = useState<string | null>(null);
@@ -44,7 +30,7 @@ function ResumeAnalysisPage() {
 
       const result = await response.json();
       sessionStorage.setItem("analysisResult", JSON.stringify(result));
-      navigate({ to: "/job-matches" });
+      navigate("/job-matches");
     } catch (error: unknown) {
       const errMsg = error instanceof Error ? error.message : String(error);
       const msg = errMsg.includes("fetch")
@@ -402,3 +388,5 @@ function ResumeAnalysisPage() {
     </div>
   );
 }
+
+export default ResumeAnalysis;

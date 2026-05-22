@@ -3,7 +3,7 @@
 </p>
 
 <h1 align="center">
-  🚀 CareerAI — Resume Analyzer & Job Matcher
+  🚀 CareerAI — Resume Analyzer &amp; Job Matcher
 </h1>
 
 <p align="center">
@@ -13,11 +13,11 @@
 <p align="center">
   <img src="https://img.shields.io/badge/React-19.2-61DAFB?style=flat-square&logo=react&logoColor=white" alt="React" />
   <img src="https://img.shields.io/badge/TypeScript-5.8-3178C6?style=flat-square&logo=typescript&logoColor=white" alt="TypeScript" />
-  <img src="https://img.shields.io/badge/Vite-7.3-646CFF?style=flat-square&logo=vite&logoColor=white" alt="Vite" />
+  <img src="https://img.shields.io/badge/Vite-6.4-646CFF?style=flat-square&logo=vite&logoColor=white" alt="Vite" />
   <img src="https://img.shields.io/badge/TailwindCSS-4.2-38BDF8?style=flat-square&logo=tailwindcss&logoColor=white" alt="Tailwind" />
   <img src="https://img.shields.io/badge/FastAPI-0.100+-009688?style=flat-square&logo=fastapi&logoColor=white" alt="FastAPI" />
   <img src="https://img.shields.io/badge/Python-3.10+-3776AB?style=flat-square&logo=python&logoColor=white" alt="Python" />
-  <img src="https://img.shields.io/badge/spaCy-NLP-09A3D5?style=flat-square&logo=spacy&logoColor=white" alt="spaCy" />
+  <img src="https://img.shields.io/badge/Gemini-AI-4285F4?style=flat-square&logo=google&logoColor=white" alt="Gemini AI" />
 </p>
 
 <p align="center">
@@ -40,7 +40,7 @@
 - [⚙️ Tech Stack](#️-tech-stack)
 - [🚀 Getting Started](#-getting-started)
 - [🔧 Configuration](#-configuration)
-- [📸 Screenshots](#-screenshots)
+- [🌐 Deployment](#-deployment)
 - [🧪 How It Works](#-how-it-works)
 - [🤝 Contributing](#-contributing)
 - [📜 License](#-license)
@@ -95,7 +95,7 @@
 │         │                │                     │             │
 │         └────────────────┼─────────────────────┘             │
 │                          │                                   │
-│              TanStack Router + React 19                      │
+│              TanStack Router + React 19 (SPA)                │
 └──────────────────────────┬───────────────────────────────────┘
                            │ HTTP POST /analyze
                            ▼
@@ -132,30 +132,26 @@
 resumeanalyzer/
 │
 ├── 🎨 frontend/
-│   ├── src/
-│   │   ├── routes/
-│   │   │   ├── __root.tsx              # Root layout with navigation
-│   │   │   ├── index.tsx               # 🏠 Landing page (Hero + Features)
-│   │   │   ├── resume-analysis.tsx     # 📄 Resume upload & analysis page
-│   │   │   └── job-matches.tsx         # 💼 Job matches dashboard
-│   │   ├── components/
-│   │   │   ├── AnalysisResultDisplay.tsx  # 📊 Rich analysis result UI
-│   │   │   ├── DashboardSidebar.tsx       # 📋 Sidebar navigation
-│   │   │   ├── Navigation.tsx             # 🧭 Top navigation bar
-│   │   │   └── ui/                        # 🧩 Radix UI primitives
-│   │   ├── hooks/                      # ⚓ Custom React hooks
-│   │   ├── lib/                        # 🔧 Utility functions
-│   │   ├── styles.css                  # 🎨 Global styles & design system
-│   │   └── router.tsx                  # 🗺️ TanStack router config
-│   │
-│   ├── vite.config.ts                  # ⚡ Vite build configuration
+│   ├── index.html                      # 📄 Vite SPA entry point (fonts, meta)
+│   ├── vercel.json                     # ☁️ Vercel SPA routing rewrite
+│   ├── vite.config.ts                  # ⚡ Standard Vite + TanStack Router config
 │   ├── tsconfig.json                   # 📝 TypeScript configuration
 │   ├── package.json                    # 📦 Dependencies & scripts
-│   ├── package-lock.json               # 📦 Lockfile for npm dependencies
-│   ├── bun.lock                        # Optional Bun lockfile
-│   ├── bunfig.toml                     # Optional Bun config
-│   ├── components.json                 # Frontend component config
-│   └── node_modules/                   # Installed frontend packages
+│   └── src/
+│       ├── main.tsx                    # 🚀 React SPA entry point
+│       ├── router.tsx                  # 🗺️ TanStack router config
+│       ├── routeTree.gen.ts            # 🔧 Auto-generated route tree
+│       ├── styles.css                  # 🎨 Global styles & design system
+│       ├── routes/
+│       │   ├── __root.tsx              # 🏠 Root layout with navigation
+│       │   ├── index.tsx               # 🏠 Landing page (Hero + Features)
+│       │   ├── resume-analysis.tsx     # 📄 Resume upload & analysis page
+│       │   └── job-matches.tsx         # 💼 Job matches dashboard
+│       └── components/
+│           ├── AnalysisResultDisplay.tsx  # 📊 Rich analysis result UI
+│           ├── DashboardSidebar.tsx       # 📋 Sidebar navigation
+│           ├── Navigation.tsx             # 🧭 Top navigation bar
+│           └── ui/                        # 🧩 Radix UI primitives
 │
 ├── 🐍 backend/
 │   ├── api.py                          # 🌐 FastAPI REST server
@@ -163,15 +159,14 @@ resumeanalyzer/
 │   ├── local_parser.py                 # 🧠 spaCy NLP resume parser (Fallback)
 │   ├── resume_analyzer.py              # 🔧 Shared resume analysis utilities
 │   ├── requirements.txt                # 📋 Python dependencies
+│   ├── .env                            # 🔑 Your local API keys (not committed)
 │   ├── .env.example                    # 🔑 Example environment configuration
 │   └── resume_data.csv                 # 💾 Job dataset (50K+ records)
 │
-├── 📄 Config Files
-│   ├── .gitignore
-│   ├── .prettierrc
-│   ├── .prettierignore
-│   ├── eslint.config.js
-│   └── README.md                       # 📖 You are here!
+└── 📄 Config Files
+    ├── .gitignore
+    ├── .prettierrc
+    └── README.md                       # 📖 You are here!
 ```
 
 <br/>
@@ -186,11 +181,10 @@ resumeanalyzer/
 | Technology | Purpose |
 |:---|:---|
 | **React 19** | UI framework with latest concurrent features |
-| **TanStack Router** | Type-safe file-based routing |
+| **TanStack Router** | Type-safe file-based client-side routing |
 | **TanStack Query** | Async state management & data fetching |
-| **TanStack Start** | Full-stack framework with SSR support |
 | **TypeScript 5.8** | Type safety across the entire frontend |
-| **Vite 7** | Next-gen build tool with HMR |
+| **Vite 6** | Next-gen build tool with HMR |
 | **Tailwind CSS 4** | Utility-first styling with JIT compilation |
 | **Radix UI** | Accessible, unstyled UI primitives |
 | **Recharts** | Data visualization for score breakdowns |
@@ -221,15 +215,15 @@ resumeanalyzer/
 
 - **Node.js** `>= 18.x`
 - **Python** `>= 3.10`
-- **Bun** _(optional, for faster installs)_
+- **npm** (comes with Node.js)
 
 ---
 
 ### 1️⃣ Clone the Repository
 
 ```bash
-git clone https://github.com/your-username/resumeanalyzer.git
-cd resumeanalyzer
+git clone https://github.com/Nazeem0/resume_analyzer.git
+cd resume_analyzer
 ```
 
 ### 2️⃣ Install Frontend Dependencies
@@ -258,6 +252,7 @@ Get a free API key at [Google AI Studio](https://aistudio.google.com/app/apikey)
 ### 5️⃣ Start the Backend Server
 
 ```bash
+cd backend
 python api.py
 ```
 > 🟢 The API server starts at **http://localhost:8000**
@@ -265,7 +260,7 @@ python api.py
 ### 6️⃣ Start the Frontend Dev Server
 
 ```bash
-cd ../frontend
+cd frontend
 npm run dev
 ```
 > 🟢 The app opens at **http://localhost:5173**
@@ -308,13 +303,42 @@ The project includes `resume_data.csv` (~17MB) containing **50,000+ job records*
 > Premium glassmorphism design with floating orbs, gradient text, and smooth animations
 <img width="1915" height="974" alt="image" src="https://github.com/user-attachments/assets/12da755c-0677-4745-83f6-09bf66e3f66d" />
 
-
 ### 📄 Resume Analysis
 > Upload your resume and get instant AI-powered analysis with detailed skill extraction
-
 <img width="1914" height="977" alt="image" src="https://github.com/user-attachments/assets/3b1bc308-34e4-42ee-9344-f4b778f42899" />
+
 ### 📊 Results Dashboard
 > Comprehensive compatibility scores, skill gap analysis, and career insights
+
+<br/>
+
+---
+
+<br/>
+
+## 🌐 Deployment
+
+### Frontend → Vercel
+
+The frontend is a standard **Vite SPA** — fully compatible with Vercel.
+
+1. Push this repository to GitHub.
+2. Go to [vercel.com](https://vercel.com) and import the repository.
+3. Configure the project settings:
+   - **Root Directory**: `frontend`
+   - **Framework Preset**: Vite
+   - **Build Command**: `npm run build`
+   - **Output Directory**: `dist`
+4. Click **Deploy**.
+
+> The included `frontend/vercel.json` automatically configures SPA routing so all pages (e.g. `/resume-analysis`, `/job-matches`) work correctly.
+
+### Backend → Local / Self-hosted
+
+The Python FastAPI backend is designed to run locally or on any Python-capable server.
+For local use, simply run `python api.py` from the `backend/` folder.
+
+> The frontend auto-detects whether it's running on `localhost` and routes API requests accordingly — no config needed for local development.
 
 <br/>
 
@@ -354,8 +378,6 @@ The project includes `resume_data.csv` (~17MB) containing **50,000+ job records*
 
 <br/>
 
-
-
 ## 🤝 Contributing
 
 Contributions are welcome! Here's how to get started:
@@ -371,3 +393,7 @@ Contributions are welcome! Here's how to get started:
 ---
 
 <br/>
+
+## 📜 License
+
+This project is licensed under the **MIT License** — see the [LICENSE](LICENSE) file for details.

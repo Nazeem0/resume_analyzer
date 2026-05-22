@@ -1,22 +1,9 @@
-import { createFileRoute, Link } from "@tanstack/react-router";
 import { useEffect, useState } from "react";
-import { AnalysisResultDisplay } from "@/components/AnalysisResultDisplay";
-import type { AnalysisResult } from "@/lib/resume-analyzer";
+import { Link } from "react-router-dom";
+import { AnalysisResultDisplay } from "../components/AnalysisResultDisplay";
+import type { AnalysisResult } from "../lib/resume-analyzer";
 
-export const Route = createFileRoute("/job-matches")({
-  head: () => ({
-    meta: [
-      { title: "Matches | CareerAI" },
-      {
-        name: "description",
-        content: "AI-curated executive job matches tailored to your professional profile.",
-      },
-    ],
-  }),
-  component: JobMatchesPage,
-});
-
-function JobMatchesPage() {
+function JobMatches() {
   const [analysisResult, setAnalysisResult] = useState<AnalysisResult | null>(null);
 
   useEffect(() => {
@@ -131,8 +118,8 @@ function JobMatchesPage() {
                 AI-powered analysis from your resume
               </p>
             </div>
-            <a
-              href="/resume-analysis"
+            <Link
+              to="/resume-analysis"
               style={{
                 display: "flex",
                 alignItems: "center",
@@ -152,7 +139,7 @@ function JobMatchesPage() {
                 upload_file
               </span>
               Upload New Resume
-            </a>
+            </Link>
           </div>
           <AnalysisResultDisplay result={analysisResult} />
         </div>
@@ -160,3 +147,5 @@ function JobMatchesPage() {
     </div>
   );
 }
+
+export default JobMatches;

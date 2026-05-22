@@ -1,19 +1,4 @@
-import { createFileRoute } from "@tanstack/react-router";
-import { Link } from "@tanstack/react-router";
-
-export const Route = createFileRoute("/")({
-  head: () => ({
-    meta: [
-      { title: "CareerAI | Your Career, Powered by Intelligence" },
-      {
-        name: "description",
-        content:
-          "Executive-grade AI platform analyzing your professional DNA to find matches others miss.",
-      },
-    ],
-  }),
-  component: Index,
-});
+import { Link } from "react-router-dom";
 
 const stats = [
   { value: "98%", label: "Match Accuracy", icon: "verified" },
@@ -57,7 +42,7 @@ const steps = [
   { num: "03", title: "Get Matched", desc: "Receive curated roles sorted by compatibility score." },
 ];
 
-function Index() {
+function Home() {
   return (
     <div className="glass-bg" style={{ minHeight: "100vh", color: "#e2e8ff", overflowX: "hidden" }}>
       {/* Floating Orbs */}
@@ -83,7 +68,7 @@ function Index() {
           {/* Badge */}
           <div className="badge-glass anim-fade-up" style={{ marginBottom: 32 }}>
             <span className="glow-dot" />
-            Now Powered by GPT-4o
+            Now Powered by Gemini
           </div>
 
           {/* Headline */}
@@ -739,3 +724,5 @@ function Index() {
     </div>
   );
 }
+
+export default Home;

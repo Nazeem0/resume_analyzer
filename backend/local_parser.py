@@ -5,7 +5,7 @@ from typing import Dict, Any, List
 # Note: Requires `python -m spacy download en_core_web_sm`
 nlp = None
 try:
-    import spacy
+    import spacy  # type: ignore
     try:
         nlp = spacy.load("en_core_web_sm")
     except OSError:
