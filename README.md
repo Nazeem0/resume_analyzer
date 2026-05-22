@@ -56,6 +56,9 @@
 **CareerAI** is an executive-grade AI-powered platform that analyzes your professional DNA to find career matches others miss. Upload your resume (PDF or text), and our intelligent engine extracts your skills, experience, and career trajectory — then matches you with the most compatible roles from a dataset of **50,000+ positions**.
 
 > 💡 Move beyond job boards into **intelligent career steering**.
+> <img width="1915" height="974" alt="image" src="https://github.com/user-attachments/assets/12da755c-0677-4745-83f6-09bf66e3f66d" />
+
+<img width="1914" height="977" alt="image" src="https://github.com/user-attachments/assets/3b1bc308-34e4-42ee-9344-f4b778f42899" />
 
 <br/>
 
