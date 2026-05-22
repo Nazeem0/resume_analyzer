@@ -70,7 +70,16 @@ export function Navigation() {
         </Link>
 
         {/* Desktop Nav */}
-  <nav style={{ display: "flex", alignItems: "center", gap: 4, justifyContent: "center", flex: 1 }} className="hidden md:flex">
+        <nav
+          style={{
+            display: "flex",
+            alignItems: "center",
+            gap: 4,
+            justifyContent: "center",
+            flex: 1,
+          }}
+          className="hidden md:flex"
+        >
           {links.map(({ to, label, exact }) => {
             const active = isActive(to, exact);
             return (

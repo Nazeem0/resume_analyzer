@@ -5,7 +5,11 @@ export const Route = createFileRoute("/")({
   head: () => ({
     meta: [
       { title: "CareerAI | Your Career, Powered by Intelligence" },
-      { name: "description", content: "Executive-grade AI platform analyzing your professional DNA to find matches others miss." },
+      {
+        name: "description",
+        content:
+          "Executive-grade AI platform analyzing your professional DNA to find matches others miss.",
+      },
     ],
   }),
   component: Index,
@@ -45,16 +49,17 @@ const features = [
 
 const steps = [
   { num: "01", title: "Upload Resume", desc: "Drag & drop your PDF, DOCX or LinkedIn export." },
-  { num: "02", title: "AI Extracts DNA", desc: "Our engine maps your skills, trajectory and hidden strengths." },
+  {
+    num: "02",
+    title: "AI Extracts DNA",
+    desc: "Our engine maps your skills, trajectory and hidden strengths.",
+  },
   { num: "03", title: "Get Matched", desc: "Receive curated roles sorted by compatibility score." },
 ];
 
 function Index() {
   return (
-    <div
-      className="glass-bg"
-      style={{ minHeight: "100vh", color: "#e2e8ff", overflowX: "hidden" }}
-    >
+    <div className="glass-bg" style={{ minHeight: "100vh", color: "#e2e8ff", overflowX: "hidden" }}>
       {/* Floating Orbs */}
       <div className="orb orb-1" />
       <div className="orb orb-2" />
@@ -93,8 +98,7 @@ function Index() {
               maxWidth: 820,
             }}
           >
-            Your Career,{" "}
-            <span className="gradient-text">Powered by Intelligence</span>
+            Your Career, <span className="gradient-text">Powered by Intelligence</span>
           </h1>
 
           {/* Sub */}
@@ -108,9 +112,8 @@ function Index() {
               marginBottom: 48,
             }}
           >
-            The executive-grade platform that analyzes your professional DNA to
-            find matches that others miss. Move beyond job boards into
-            intelligent career steering.
+            The executive-grade platform that analyzes your professional DNA to find matches that
+            others miss. Move beyond job boards into intelligent career steering.
           </p>
 
           {/* CTA */}
@@ -126,7 +129,11 @@ function Index() {
                 Analyze My Resume
               </button>
             </Link>
-            <a href="#features" className="btn-glass" style={{ fontSize: 15, padding: "16px 32px" }}>
+            <a
+              href="#features"
+              className="btn-glass"
+              style={{ fontSize: 15, padding: "16px 32px" }}
+            >
               See How It Works
               <span className="material-symbols-outlined" style={{ fontSize: 18 }}>
                 arrow_downward
@@ -161,7 +168,13 @@ function Index() {
                 {["#f87171", "#fbbf24", "#34d399"].map((c) => (
                   <div
                     key={c}
-                    style={{ width: 12, height: 12, borderRadius: "50%", background: c, opacity: 0.9 }}
+                    style={{
+                      width: 12,
+                      height: 12,
+                      borderRadius: "50%",
+                      background: c,
+                      opacity: 0.9,
+                    }}
                   />
                 ))}
               </div>
@@ -182,15 +195,39 @@ function Index() {
                       padding: "16px 20px",
                     }}
                   >
-                    <div style={{ fontSize: 11, color: "#475569", fontWeight: 600, marginBottom: 6, letterSpacing: "0.06em", textTransform: "uppercase" }}>
+                    <div
+                      style={{
+                        fontSize: 11,
+                        color: "#475569",
+                        fontWeight: 600,
+                        marginBottom: 6,
+                        letterSpacing: "0.06em",
+                        textTransform: "uppercase",
+                      }}
+                    >
                       {label}
                     </div>
                     <div style={{ fontSize: 26, fontWeight: 800, color }}>{value}</div>
                   </div>
                 ))}
               </div>
-              <div style={{ marginTop: 16, height: 6, borderRadius: 100, background: "rgba(255,255,255,0.05)", overflow: "hidden" }}>
-                <div style={{ width: "94%", height: "100%", borderRadius: 100, background: "linear-gradient(90deg,#6366f1,#38bdf8)" }} />
+              <div
+                style={{
+                  marginTop: 16,
+                  height: 6,
+                  borderRadius: 100,
+                  background: "rgba(255,255,255,0.05)",
+                  overflow: "hidden",
+                }}
+              >
+                <div
+                  style={{
+                    width: "94%",
+                    height: "100%",
+                    borderRadius: 100,
+                    background: "linear-gradient(90deg,#6366f1,#38bdf8)",
+                  }}
+                />
               </div>
             </div>
           </div>
@@ -231,13 +268,21 @@ function Index() {
                     margin: "0 auto 16px",
                   }}
                 >
-                  <span className="material-symbols-outlined" style={{ fontSize: 22, color: "#818cf8", fontVariationSettings: "'FILL' 1" }}>
+                  <span
+                    className="material-symbols-outlined"
+                    style={{ fontSize: 22, color: "#818cf8", fontVariationSettings: "'FILL' 1" }}
+                  >
                     {icon}
                   </span>
                 </div>
                 <div
                   className="gradient-text-blue"
-                  style={{ fontSize: 32, fontWeight: 800, letterSpacing: "-0.02em", marginBottom: 6 }}
+                  style={{
+                    fontSize: 32,
+                    fontWeight: 800,
+                    letterSpacing: "-0.02em",
+                    marginBottom: 6,
+                  }}
                 >
                   {value}
                 </div>
@@ -248,13 +293,15 @@ function Index() {
         </section>
 
         {/* ── Features ─────────────────────────────────────────────────── */}
-        <section
-          id="features"
-          style={{ padding: "96px 24px", maxWidth: 1100, margin: "0 auto" }}
-        >
+        <section id="features" style={{ padding: "96px 24px", maxWidth: 1100, margin: "0 auto" }}>
           <div style={{ textAlign: "center", marginBottom: 64 }}>
             <div className="badge-glass" style={{ marginBottom: 20, display: "inline-flex" }}>
-              <span className="material-symbols-outlined" style={{ fontSize: 14, fontVariationSettings: "'FILL' 1" }}>auto_awesome</span>
+              <span
+                className="material-symbols-outlined"
+                style={{ fontSize: 14, fontVariationSettings: "'FILL' 1" }}
+              >
+                auto_awesome
+              </span>
               Core Features
             </div>
             <h2
@@ -268,8 +315,8 @@ function Index() {
               Intelligence in Every Step
             </h2>
             <p style={{ color: "#475569", maxWidth: 520, margin: "0 auto", lineHeight: 1.7 }}>
-              Our proprietary engine deconstructs your experience and maps it to
-              the future of industry requirements.
+              Our proprietary engine deconstructs your experience and maps it to the future of
+              industry requirements.
             </p>
           </div>
 
@@ -330,12 +377,25 @@ function Index() {
                 >
                   <span
                     className="material-symbols-outlined"
-                    style={{ color: f.color, fontSize: 26, fontVariationSettings: f.featured ? "'FILL' 1" : "'FILL' 0" }}
+                    style={{
+                      color: f.color,
+                      fontSize: 26,
+                      fontVariationSettings: f.featured ? "'FILL' 1" : "'FILL' 0",
+                    }}
                   >
                     {f.icon}
                   </span>
                 </div>
-                <h3 style={{ fontSize: 20, fontWeight: 700, marginBottom: 12, letterSpacing: "-0.01em" }}>{f.title}</h3>
+                <h3
+                  style={{
+                    fontSize: 20,
+                    fontWeight: 700,
+                    marginBottom: 12,
+                    letterSpacing: "-0.01em",
+                  }}
+                >
+                  {f.title}
+                </h3>
                 <p style={{ color: "#475569", lineHeight: 1.7, fontSize: 14 }}>{f.desc}</p>
               </div>
             ))}
@@ -354,8 +414,7 @@ function Index() {
                   marginBottom: 12,
                 }}
               >
-                Three Steps to Your{" "}
-                <span className="gradient-text">Dream Role</span>
+                Three Steps to Your <span className="gradient-text">Dream Role</span>
               </h2>
               <p style={{ color: "#475569", fontSize: 15 }}>Simple, powerful, and blazing fast.</p>
             </div>
@@ -444,7 +503,8 @@ function Index() {
                   style={{
                     position: "absolute",
                     inset: 0,
-                    background: "linear-gradient(to right, transparent 40%, rgba(10,15,30,0.9) 100%)",
+                    background:
+                      "linear-gradient(to right, transparent 40%, rgba(10,15,30,0.9) 100%)",
                   }}
                 />
               </div>
@@ -483,10 +543,9 @@ function Index() {
                     marginTop: 20,
                   }}
                 >
-                  "CareerAI didn't just find me a new role; it identified a
-                  career pivot I hadn't considered. The accuracy of their
-                  matching engine is superior to any headhunter I've worked
-                  with in my 20-year career."
+                  "CareerAI didn't just find me a new role; it identified a career pivot I hadn't
+                  considered. The accuracy of their matching engine is superior to any headhunter
+                  I've worked with in my 20-year career."
                 </blockquote>
                 <div>
                   <div style={{ fontWeight: 700, fontSize: 15, color: "#e2e8ff" }}>Alex Rivers</div>
@@ -495,15 +554,21 @@ function Index() {
                   </div>
                 </div>
                 <div style={{ display: "flex", gap: 4 }}>
-                  {Array(5).fill(0).map((_, i) => (
-                    <span
-                      key={i}
-                      className="material-symbols-outlined"
-                      style={{ fontSize: 16, color: "#fbbf24", fontVariationSettings: "'FILL' 1" }}
-                    >
-                      star
-                    </span>
-                  ))}
+                  {Array(5)
+                    .fill(0)
+                    .map((_, i) => (
+                      <span
+                        key={i}
+                        className="material-symbols-outlined"
+                        style={{
+                          fontSize: 16,
+                          color: "#fbbf24",
+                          fontVariationSettings: "'FILL' 1",
+                        }}
+                      >
+                        star
+                      </span>
+                    ))}
                 </div>
               </div>
             </div>
@@ -547,18 +612,35 @@ function Index() {
                   position: "relative",
                 }}
               >
-                Ready for the{" "}
-                <span className="gradient-text">Next Level?</span>
+                Ready for the <span className="gradient-text">Next Level?</span>
               </h2>
-              <p style={{ color: "#475569", fontSize: 16, lineHeight: 1.7, marginBottom: 40, position: "relative" }}>
-                Join 10,000+ high-level professionals who have unlocked their
-                true market value with AI-driven career intelligence.
+              <p
+                style={{
+                  color: "#475569",
+                  fontSize: 16,
+                  lineHeight: 1.7,
+                  marginBottom: 40,
+                  position: "relative",
+                }}
+              >
+                Join 10,000+ high-level professionals who have unlocked their true market value with
+                AI-driven career intelligence.
               </p>
-              <div style={{ display: "flex", justifyContent: "center", gap: 16, flexWrap: "wrap", position: "relative" }}>
+              <div
+                style={{
+                  display: "flex",
+                  justifyContent: "center",
+                  gap: 16,
+                  flexWrap: "wrap",
+                  position: "relative",
+                }}
+              >
                 <Link to="/resume-analysis" style={{ textDecoration: "none" }}>
                   <button className="btn-primary" style={{ fontSize: 16, padding: "18px 40px" }}>
                     Start Free Analysis
-                    <span className="material-symbols-outlined" style={{ fontSize: 20 }}>arrow_forward</span>
+                    <span className="material-symbols-outlined" style={{ fontSize: 20 }}>
+                      arrow_forward
+                    </span>
                   </button>
                 </Link>
               </div>
@@ -609,13 +691,38 @@ function Index() {
               { title: "Legal", links: ["Privacy Policy", "Terms of Service", "Support"] },
             ].map(({ title, links }) => (
               <div key={title}>
-                <div style={{ fontSize: 12, fontWeight: 700, color: "#e2e8ff", marginBottom: 16, letterSpacing: "0.06em", textTransform: "uppercase" }}>
+                <div
+                  style={{
+                    fontSize: 12,
+                    fontWeight: 700,
+                    color: "#e2e8ff",
+                    marginBottom: 16,
+                    letterSpacing: "0.06em",
+                    textTransform: "uppercase",
+                  }}
+                >
                   {title}
                 </div>
-                <ul style={{ listStyle: "none", padding: 0, margin: 0, display: "flex", flexDirection: "column", gap: 10 }}>
+                <ul
+                  style={{
+                    listStyle: "none",
+                    padding: 0,
+                    margin: 0,
+                    display: "flex",
+                    flexDirection: "column",
+                    gap: 10,
+                  }}
+                >
                   {links.map((l) => (
                     <li key={l}>
-                      <a href="#" style={{ fontSize: 13, color: "#334155", textDecoration: "none", transition: "color 0.2s" }}
+                      <a
+                        href="#"
+                        style={{
+                          fontSize: 13,
+                          color: "#334155",
+                          textDecoration: "none",
+                          transition: "color 0.2s",
+                        }}
                         onMouseEnter={(e) => (e.currentTarget.style.color = "#a5b4fc")}
                         onMouseLeave={(e) => (e.currentTarget.style.color = "#334155")}
                       >

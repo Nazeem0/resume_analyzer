@@ -1,16 +1,20 @@
 import re
-import spacy
 from typing import Dict, Any, List
 
-# Load the small english model for basic NER
+# Load the small english model for basic NER if spacy is available
 # Note: Requires `python -m spacy download en_core_web_sm`
+nlp = None
 try:
-    nlp = spacy.load("en_core_web_sm")
-except OSError:
-    print("Downloading spacy model...")
-    import subprocess
-    subprocess.run(["python", "-m", "spacy", "download", "en_core_web_sm"])
-    nlp = spacy.load("en_core_web_sm")
+    import spacy
+    try:
+        nlp = spacy.load("en_core_web_sm")
+    except OSError:
+        print("Downloading spacy model...")
+        import subprocess
+        subprocess.run(["python", "-m", "spacy", "download", "en_core_web_sm"])
+        nlp = spacy.load("en_core_web_sm")
+except ImportError:
+    print("SpaCy is not installed. Using basic regex/first-line fallback for name extraction.")
 
 def extract_email(text: str) -> str:
     email_pattern = re.compile(r'[a-zA-Z0-9_.+-]+@[a-zA-Z0-9-]+\.[a-zA-Z0-9-.]+')
@@ -31,11 +35,21 @@ def extract_name(text: str) -> str:
         if len(first_line.split()) <= 4 and not any(char.isdigit() for char in first_line):
             return first_line.title()
 
-    # 2. Fallback to spacy NER
-    doc = nlp(text)
-    for ent in doc.ents:
-        if ent.label_ == "PERSON":
-            return ent.text.strip()
+    # 2. Fallback to spacy NER if available
+    if nlp is not None:
+        try:
+            doc = nlp(text)
+            for ent in doc.ents:
+                if ent.label_ == "PERSON":
+                    return ent.text.strip()
+        except Exception:
+            pass
+
+    # 3. Simple regex-based fallback for name extraction (e.g. Name: John Doe)
+    name_match = re.search(r'(?:name|candidate)\s*:\s*([a-zA-Z\s]{2,30})', text, re.IGNORECASE)
+    if name_match:
+        return name_match.group(1).strip().title()
+
     return "Candidate Name"
 
 def extract_years_experience(text: str) -> float:

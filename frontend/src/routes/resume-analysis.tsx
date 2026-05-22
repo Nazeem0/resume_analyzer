@@ -5,7 +5,11 @@ export const Route = createFileRoute("/resume-analysis")({
   head: () => ({
     meta: [
       { title: "Resume Analysis | CareerAI" },
-      { name: "description", content: "Upload your resume and let our AI extract your expertise to match executive roles." },
+      {
+        name: "description",
+        content:
+          "Upload your resume and let our AI extract your expertise to match executive roles.",
+      },
     ],
   }),
   component: ResumeAnalysisPage,
@@ -24,20 +28,28 @@ function ResumeAnalysisPage() {
       const formData = new FormData();
       formData.append("file", file);
 
-      const response = await fetch("https://resume-analyzer-api-yh3l.onrender.com/analyze", {
+      const isLocalhost =
+        window.location.hostname === "localhost" || window.location.hostname === "127.0.0.1";
+      const apiUrl = isLocalhost
+        ? "http://localhost:8000/analyze"
+        : "https://resume-analyzer-api-yh3l.onrender.com/analyze";
+
+      const response = await fetch(apiUrl, {
         method: "POST",
         body: formData,
       });
 
-      if (!response.ok) throw new Error("Failed to analyze resume. Make sure the Python API is running!");
+      if (!response.ok)
+        throw new Error("Failed to analyze resume. Make sure the Python API is running!");
 
       const result = await response.json();
       sessionStorage.setItem("analysisResult", JSON.stringify(result));
       navigate({ to: "/job-matches" });
-    } catch (error: any) {
-      const msg = error?.message?.includes("fetch")
+    } catch (error: unknown) {
+      const errMsg = error instanceof Error ? error.message : String(error);
+      const msg = errMsg.includes("fetch")
         ? "❌ Could not connect to the Python API.\n\nPlease make sure your Python server is running:\n  python api.py"
-        : `❌ Analysis failed: ${error?.message || error}`;
+        : `❌ Analysis failed: ${errMsg}`;
       alert(msg);
     } finally {
       setIsLoading(false);
@@ -69,10 +81,24 @@ function ResumeAnalysisPage() {
   };
 
   const trustItems = [
-    { icon: "lock", title: "Privacy First", desc: "Your data is encrypted and never sold to third parties.", color: "#38bdf8" },
-    { icon: "psychology", title: "AI Matching", desc: "Advanced extraction for precision career mapping.", color: "#a78bfa" },
-    { icon: "bolt", title: "Instant Results", desc: "Analysis complete in under 12 milliseconds.", color: "#34d399" },
-  
+    {
+      icon: "lock",
+      title: "Privacy First",
+      desc: "Your data is encrypted and never sold to third parties.",
+      color: "#38bdf8",
+    },
+    {
+      icon: "psychology",
+      title: "AI Matching",
+      desc: "Advanced extraction for precision career mapping.",
+      color: "#a78bfa",
+    },
+    {
+      icon: "bolt",
+      title: "Instant Results",
+      desc: "Analysis complete in under 12 milliseconds.",
+      color: "#34d399",
+    },
   ];
 
   return (
@@ -85,8 +111,15 @@ function ResumeAnalysisPage() {
       <div className="orb orb-2" />
       <div className="orb orb-3" />
 
-      <main style={{ position: "relative", zIndex: 1, maxWidth: 840, margin: "0 auto", padding: "56px 24px" }}>
-
+      <main
+        style={{
+          position: "relative",
+          zIndex: 1,
+          maxWidth: 840,
+          margin: "0 auto",
+          padding: "56px 24px",
+        }}
+      >
         {/* Header */}
         <div style={{ textAlign: "center", marginBottom: 48 }}>
           <div className="badge-glass" style={{ marginBottom: 24, display: "inline-flex" }}>
@@ -102,11 +135,19 @@ function ResumeAnalysisPage() {
               marginBottom: 16,
             }}
           >
-            Upload Your{" "}
-            <span className="gradient-text">Resume</span>
+            Upload Your <span className="gradient-text">Resume</span>
           </h1>
-          <p style={{ color: "#475569", fontSize: 16, lineHeight: 1.7, maxWidth: 480, margin: "0 auto" }}>
-            Our AI will extract your expertise and match you with executive roles tailored to your DNA.
+          <p
+            style={{
+              color: "#475569",
+              fontSize: 16,
+              lineHeight: 1.7,
+              maxWidth: 480,
+              margin: "0 auto",
+            }}
+          >
+            Our AI will extract your expertise and match you with executive roles tailored to your
+            DNA.
           </p>
         </div>
 
@@ -122,13 +163,19 @@ function ResumeAnalysisPage() {
           }}
         >
           {/* Background accent */}
-          <div style={{
-            position: "absolute", top: "50%", left: "50%",
-            transform: "translate(-50%,-50%)",
-            width: 500, height: 500, borderRadius: "50%",
-            background: "radial-gradient(circle, rgba(99,102,241,0.06) 0%, transparent 70%)",
-            pointerEvents: "none",
-          }} />
+          <div
+            style={{
+              position: "absolute",
+              top: "50%",
+              left: "50%",
+              transform: "translate(-50%,-50%)",
+              width: 500,
+              height: 500,
+              borderRadius: "50%",
+              background: "radial-gradient(circle, rgba(99,102,241,0.06) 0%, transparent 70%)",
+              pointerEvents: "none",
+            }}
+          />
 
           {/* Drop Zone */}
           <div
@@ -139,7 +186,9 @@ function ResumeAnalysisPage() {
               position: "relative",
               borderColor: isDragging ? "rgba(129,140,248,0.8)" : undefined,
               background: isDragging ? "rgba(99,102,241,0.08)" : undefined,
-              boxShadow: isDragging ? "0 0 40px rgba(99,102,241,0.15), inset 0 0 40px rgba(99,102,241,0.05)" : undefined,
+              boxShadow: isDragging
+                ? "0 0 40px rgba(99,102,241,0.15), inset 0 0 40px rgba(99,102,241,0.05)"
+                : undefined,
             }}
             onDragOver={handleDragOver}
             onDragLeave={handleDragLeave}
@@ -157,31 +206,46 @@ function ResumeAnalysisPage() {
 
             {isLoading ? (
               /* Loading state */
-              <div style={{ display: "flex", flexDirection: "column", alignItems: "center", gap: 20 }}>
+              <div
+                style={{ display: "flex", flexDirection: "column", alignItems: "center", gap: 20 }}
+              >
                 <div style={{ position: "relative", width: 72, height: 72 }}>
-                  <div style={{
-                    position: "absolute", inset: 0,
-                    borderRadius: "50%",
-                    border: "3px solid rgba(99,102,241,0.15)",
-                  }} />
-                  <div style={{
-                    position: "absolute", inset: 0,
-                    borderRadius: "50%",
-                    border: "3px solid transparent",
-                    borderTopColor: "#6366f1",
-                    animation: "spin-slow 1s linear infinite",
-                  }} />
-                  <div style={{
-                    position: "absolute", inset: 8,
-                    borderRadius: "50%",
-                    border: "2px solid transparent",
-                    borderTopColor: "#38bdf8",
-                    animation: "spin-slow 0.7s linear infinite reverse",
-                  }} />
+                  <div
+                    style={{
+                      position: "absolute",
+                      inset: 0,
+                      borderRadius: "50%",
+                      border: "3px solid rgba(99,102,241,0.15)",
+                    }}
+                  />
+                  <div
+                    style={{
+                      position: "absolute",
+                      inset: 0,
+                      borderRadius: "50%",
+                      border: "3px solid transparent",
+                      borderTopColor: "#6366f1",
+                      animation: "spin-slow 1s linear infinite",
+                    }}
+                  />
+                  <div
+                    style={{
+                      position: "absolute",
+                      inset: 8,
+                      borderRadius: "50%",
+                      border: "2px solid transparent",
+                      borderTopColor: "#38bdf8",
+                      animation: "spin-slow 0.7s linear infinite reverse",
+                    }}
+                  />
                 </div>
                 <div>
-                  <div style={{ fontSize: 18, fontWeight: 700, marginBottom: 6 }}>Analyzing Resume…</div>
-                  <div style={{ fontSize: 13, color: "#475569" }}>{fileName && `Processing: ${fileName}`}</div>
+                  <div style={{ fontSize: 18, fontWeight: 700, marginBottom: 6 }}>
+                    Analyzing Resume…
+                  </div>
+                  <div style={{ fontSize: 13, color: "#475569" }}>
+                    {fileName && `Processing: ${fileName}`}
+                  </div>
                 </div>
                 <div style={{ display: "flex", gap: 8, marginTop: 8 }}>
                   {["Extracting skills", "Mapping experience", "Finding matches"].map((step, i) => (
@@ -205,7 +269,9 @@ function ResumeAnalysisPage() {
               </div>
             ) : (
               /* Default state */
-              <div style={{ display: "flex", flexDirection: "column", alignItems: "center", gap: 20 }}>
+              <div
+                style={{ display: "flex", flexDirection: "column", alignItems: "center", gap: 20 }}
+              >
                 {/* Icon */}
                 <div
                   style={{
@@ -236,18 +302,41 @@ function ResumeAnalysisPage() {
                   <p style={{ fontSize: 13, color: "#475569" }}>PDF, DOCX, TXT or RTF · Max 10MB</p>
                 </div>
 
-                <div style={{ display: "flex", alignItems: "center", gap: 12, color: "#334155", width: "100%", maxWidth: 300 }}>
+                <div
+                  style={{
+                    display: "flex",
+                    alignItems: "center",
+                    gap: 12,
+                    color: "#334155",
+                    width: "100%",
+                    maxWidth: 300,
+                  }}
+                >
                   <div style={{ flex: 1, height: 1, background: "rgba(255,255,255,0.06)" }} />
-                  <span style={{ fontSize: 11, fontWeight: 700, letterSpacing: "0.08em", textTransform: "uppercase" }}>or</span>
+                  <span
+                    style={{
+                      fontSize: 11,
+                      fontWeight: 700,
+                      letterSpacing: "0.08em",
+                      textTransform: "uppercase",
+                    }}
+                  >
+                    or
+                  </span>
                   <div style={{ flex: 1, height: 1, background: "rgba(255,255,255,0.06)" }} />
                 </div>
 
                 <button
                   className="btn-primary"
                   style={{ fontSize: 14, padding: "13px 32px" }}
-                  onClick={(e) => { e.stopPropagation(); fileInputRef.current?.click(); }}
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    fileInputRef.current?.click();
+                  }}
                 >
-                  <span className="material-symbols-outlined" style={{ fontSize: 18 }}>folder_open</span>
+                  <span className="material-symbols-outlined" style={{ fontSize: 18 }}>
+                    folder_open
+                  </span>
                   Browse Files
                 </button>
               </div>
@@ -264,11 +353,7 @@ function ResumeAnalysisPage() {
             }}
           >
             {trustItems.map(({ icon, title, desc, color }) => (
-              <div
-                key={title}
-                className="glass-subtle"
-                style={{ padding: "20px 18px" }}
-              >
+              <div key={title} className="glass-subtle" style={{ padding: "20px 18px" }}>
                 <div style={{ marginBottom: 10 }}>
                   <span
                     className="material-symbols-outlined"
@@ -285,7 +370,16 @@ function ResumeAnalysisPage() {
         </div>
 
         {/* Supported Formats */}
-        <div style={{ textAlign: "center", marginTop: 28, display: "flex", gap: 12, justifyContent: "center", flexWrap: "wrap" }}>
+        <div
+          style={{
+            textAlign: "center",
+            marginTop: 28,
+            display: "flex",
+            gap: 12,
+            justifyContent: "center",
+            flexWrap: "wrap",
+          }}
+        >
           {[".PDF", ".DOCX", ".TXT", ".RTF"].map((fmt) => (
             <div
               key={fmt}

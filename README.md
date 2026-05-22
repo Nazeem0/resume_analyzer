@@ -68,13 +68,13 @@
 | Feature | Description |
 |:---:|:---|
 | 📄 **Seamless Upload** | Drag & drop PDF, DOCX, or LinkedIn exports — our parser handles complex layouts with 100% data retention |
-| 🧠 **Deep AI Analysis** | Semantic extraction of hard skills, soft skills, project impact, and leadership trajectory using NLP + LLMs |
-| 🎯 **Precision Matching** | Smart compatibility scoring (Skills 40% + Experience 30% + Education 15% + Industry 15%) |
-| 📊 **Score Breakdown** | Detailed per-job score breakdown with matching skills and skill gaps |
-| 🗺️ **Career Insights** | Personalized career path recommendations, salary estimates, and unique strength identification |
-| ⚡ **Blazing Fast** | Local NLP parsing with spaCy for instant results — no external API calls needed |
-| 🌐 **Modern UI** | Premium glassmorphism design with dynamic animations and responsive layouts |
-| 🖥️ **Run Locally** | Easy local setup — spin up the backend and frontend in minutes |
+| 🧠 **AI-Powered Parsing** | Dual-engine semantic parser utilizing **Gemini API** (`gemini-2.0-flash`) via the `google-genai` SDK for expert-grade profile extraction |
+| ⚡ **Local NLP Fallback** | Instant local NLP parsing using **spaCy** as an automatic fallback if API credentials are not configured or if requests fail |
+| 🔒 **Resume Validator** | Smart pre-validation checks contact information and resume format to immediately reject invalid uploads (e.g. medical reports, general articles) |
+| 🎯 **Domain Filter Penalty** | Advanced logic that caps match scores at 10% for candidates matching roles in completely unrelated domains to ensure accuracy |
+| 📊 **Score Breakdown** | Detailed compatibility scoring: Skills Match (40%) + Experience Match (30%) + Education Match (15%) + Industry/Domain Match (15%) |
+| 🗺️ **Career Insights** | Personalized career path recommendations, salary estimates, strength identification, and custom preparation steps |
+| 🌐 **Premium UI** | Modern glassmorphism design featuring dynamic glowing backdrops/orbs, responsive dashboards, and interactive sidebar navigation |
 
 <br/>
 
@@ -104,13 +104,14 @@
 │                   🐍 BACKEND (FastAPI)                        │
 │                                                              │
 │   ┌─────────────────┐    ┌──────────────────────────────┐   │
-│   │   api.py         │───▶│  local_parser.py (spaCy NLP) │   │
-│   │   (REST API)     │    │  • Name/Email/Phone Extract  │   │
-│   │                  │    │  • Skill Section Parsing      │   │
-│   │   • PDF Extract  │    │  • Experience Detection       │   │
-│   │   • Job Scoring  │    │  • Education Classification   │   │
-│   │   • Top 5 Match  │    └──────────────────────────────┘   │
-│   └────────┬─────────┘                                       │
+│   │   api.py         │───▶│  gemini_parser.py (Gemini 2) │   │
+│   │   (REST API)     │    │  (Structured JSON extract)   │   │
+│   │                  │    └──────────────┬───────────────┘   │
+│   │   • PDF Extract  │                   │                   │
+│   │   • Resume Check │                   ▼ (fallback)        │
+│   │   • Job Scoring  │    ┌──────────────────────────────┐   │
+│   │   • Top 5 Match  │───▶│  local_parser.py (spaCy NLP) │   │
+│   └────────┬─────────┘    └──────────────────────────────┘   │
 │            │                                                 │
 │            ▼                                                 │
 │   ┌─────────────────────────────────────────────────────┐   │
@@ -159,9 +160,11 @@ resumeanalyzer/
 │
 ├── 🐍 backend/
 │   ├── api.py                          # 🌐 FastAPI REST server
-│   ├── local_parser.py                 # 🧠 spaCy NLP resume parser
+│   ├── gemini_parser.py                # 🧠 Gemini AI resume parser (Preferred)
+│   ├── local_parser.py                 # 🧠 spaCy NLP resume parser (Fallback)
 │   ├── resume_analyzer.py              # 🔧 Shared resume analysis utilities
 │   ├── requirements.txt                # 📋 Python dependencies
+│   ├── .env.example                    # 🔑 Example environment configuration
 │   └── resume_data.csv                 # 💾 Job dataset (50K+ records)
 │
 ├── 📄 Config Files
@@ -200,7 +203,9 @@ resumeanalyzer/
 | Technology | Purpose |
 |:---|:---|
 | **FastAPI** | High-performance async REST API |
-| **spaCy** | Industrial-strength NLP for resume parsing |
+| **Google GenAI** | Advanced LLM-powered extraction with `gemini-2.0-flash` |
+| **spaCy** | Industrial-strength NLP for fallback resume parsing |
+| **python-dotenv** | Managing local environment configuration |
 | **PyPDF2** | PDF text extraction |
 | **Pandas** | Job dataset processing & analysis |
 | **Uvicorn** | ASGI server |
@@ -243,18 +248,25 @@ pip install -r requirements.txt
 python -m spacy download en_core_web_sm
 ```
 
-### 4️⃣ Start the Backend Server
+### 4️⃣ Configure API Keys (Optional but Recommended)
+
+Create a `.env` file in the `backend/` directory by copying `.env.example` and filling in your Gemini API key:
+```env
+GEMINI_API_KEY=your_gemini_api_key_here
+```
+Get a free API key at [Google AI Studio](https://aistudio.google.com/app/apikey). If not set, the app will automatically use the local spaCy NLP parser.
+
+### 5️⃣ Start the Backend Server
 
 ```bash
-cd backend
 python api.py
 ```
 > 🟢 The API server starts at **http://localhost:8000**
 
-### 5️⃣ Start the Frontend Dev Server
+### 6️⃣ Start the Frontend Dev Server
 
 ```bash
-cd frontend
+cd ../frontend
 npm run dev
 ```
 > 🟢 The app opens at **http://localhost:5173**
@@ -267,9 +279,16 @@ npm run dev
 
 ## 🔧 Configuration
 
-### 📊 Dataset
+### 🧠 Gemini API Integration
 
-> **Note:** The web app uses the **local spaCy parser** — no external API keys needed!
+The application leverages the Google GenAI SDK to perform semantic analysis on resumes.
+To activate Gemini parser:
+1. Obtain an API key from [Google AI Studio](https://aistudio.google.com/app/apikey).
+2. Set it in `backend/.env` as `GEMINI_API_KEY=...` or as a system environment variable.
+
+If the key is not set, the backend falls back to the **local spaCy parser** seamlessly.
+
+### 📊 Dataset
 
 The project includes `resume_data.csv` (~17MB) containing **50,000+ job records** with:
 - Job position names

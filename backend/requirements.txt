@@ -3,4 +3,5 @@ PyPDF2
 fastapi
 uvicorn
 python-multipart
-spacy
+google-genai
+python-dotenv
