@@ -316,7 +316,7 @@ The project includes `resume_data.csv` (~17MB) containing **50,000+ job records*
 ## 🌐 Deployment
 
 ### Frontend → Vercel
-
+https://resume-analyzer-mauve-pi.vercel.app/
 The frontend is a standard **Vite SPA** — fully compatible with Vercel.
 
 1. Push this repository to GitHub.
